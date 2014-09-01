@@ -1,0 +1,34 @@
+{
+    "rotas": [
+        {
+            "origem": "A",
+            "destino": "B",
+            "km": 10
+        },
+        {
+            "origem": "B",
+            "destino": "D",
+            "km": 15
+        },
+        {
+            "origem": "A",
+            "destino": "C",
+            "km": 20
+        },
+        {
+            "origem": "C",
+            "destino": "D",
+            "km": 30
+        },
+        {
+            "origem": "B",
+            "destino": "E",
+            "km": 50
+        },
+        {
+            "origem": "D",
+            "destino": "E",
+            "km": 30
+        }
+    ]
+}
