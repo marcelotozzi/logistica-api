@@ -1,9 +1,9 @@
 package br.com.wal.delivery.controller;
 
-import br.com.wal.delivery.business.MalhaBusiness;
-import br.com.wal.delivery.exception.MalhaInvalidaException;
-import br.com.wal.delivery.model.Malha;
-import br.com.wal.delivery.validator.MalhaValidator;
+import br.com.wal.delivery.business.DeliveryMapBusiness;
+import br.com.wal.delivery.exception.InvalidDeliveryMapException;
+import br.com.wal.delivery.model.DeliveryMap;
+import br.com.wal.delivery.validator.DeliveryMapValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,28 +23,28 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 @RequestMapping("api")
-public class MalhaController {
+public class DeliveryMapController {
 
     @Autowired
-    private MalhaBusiness malhaBusiness;
+    private DeliveryMapBusiness deliveryMapBusiness;
 
-    @RequestMapping(value = "malha", method = RequestMethod.POST,
+    @RequestMapping(value = "mapa", method = RequestMethod.POST,
             consumes = {"application/json"}, headers = "content-type=application/json")
     public
     @ResponseBody
-    ResponseEntity<String> create(@RequestBody final Malha malha, UriComponentsBuilder builder,
+    ResponseEntity<String> create(@RequestBody final DeliveryMap deliveryMap, UriComponentsBuilder builder,
                                   final HttpServletRequest request, final HttpServletResponse response) {
         HttpHeaders headers = new HttpHeaders();
 
         try {
-            MalhaValidator.validarMalha(malha);
+            DeliveryMapValidator.validateDeliveryMap(deliveryMap);
 
-            String idDaMalha = malhaBusiness.create(malha);
+            String deliveryMapToken = deliveryMapBusiness.create(deliveryMap);
 
-            headers.setLocation(builder.path("/api/malha/{id}").buildAndExpand(idDaMalha).toUri());
+            headers.setLocation(builder.path("/api/mapa/{id}").buildAndExpand(deliveryMapToken).toUri());
 
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
-        } catch (MalhaInvalidaException e) {
+        } catch (InvalidDeliveryMapException e) {
             return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);

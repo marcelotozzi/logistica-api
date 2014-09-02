@@ -1,8 +1,9 @@
 package br.com.wal.delivery.controller;
 
-import br.com.wal.delivery.business.MalhaBusiness;
-import br.com.wal.delivery.helper.MalhaHelper;
-import br.com.wal.delivery.model.Malha;
+import br.com.wal.delivery.business.DeliveryMapBusiness;
+import br.com.wal.delivery.exception.RepositoryException;
+import br.com.wal.delivery.helper.DeliveryMapHelper;
+import br.com.wal.delivery.model.DeliveryMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,15 +35,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"/applicationContext-test.xml"})
-/**
- *
- */
-public class MalhaControllerTest {
+public class DeliveryMapControllerTest {
 
     @Autowired
-    private MalhaController malhaController;
+    private DeliveryMapController deliveryMapController;
     @Mock
-    private MalhaBusiness malhaBusiness;
+    private DeliveryMapBusiness deliveryMapBusiness;
 
     private MockMvc mockMvc;
 
@@ -50,89 +48,88 @@ public class MalhaControllerTest {
     public void setUp() {
         initMocks(this);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(malhaController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(deliveryMapController).build();
 
-        setField(malhaController, "malhaBusiness", malhaBusiness);
+        setField(deliveryMapController, "deliveryMapBusiness", deliveryMapBusiness);
     }
 
     @Test
-    public void deveRetornarStatus201AoRegistrarAMalhaLogistica() throws IOException {
+    public void itShouldReturnStatus201WhenRegisterADeliveryMap() throws IOException, RepositoryException {
         //GIVEN
-        String idDaMalha = "1x4V";
-        URI uri = UriComponentsBuilder.fromPath("/api/malha/" + idDaMalha).buildAndExpand(idDaMalha).toUri();
-        Malha malha = MalhaHelper.malha();
-        when(malhaBusiness.create(malha)).thenReturn(idDaMalha);
+        String deliveryMapId = "1x4V";
+        URI uri = UriComponentsBuilder.fromPath("/api/mapa/" + deliveryMapId).buildAndExpand(deliveryMapId).toUri();
+        DeliveryMap deliveryMap = DeliveryMapHelper.deliveryMap();
+        when(deliveryMapBusiness.create(deliveryMap)).thenReturn(deliveryMapId);
 
         //WHEN
-        ResponseEntity<String> resposta = malhaController.create(
-                malha, UriComponentsBuilder.newInstance(),
+        ResponseEntity<String> response = deliveryMapController.create(
+                deliveryMap, UriComponentsBuilder.newInstance(),
                 new MockHttpServletRequest(), new MockHttpServletResponse());
 
         //THEN
-        assertThat("Deve ser retornado 201 (criado).", resposta.getStatusCode(), is(equalTo(HttpStatus.CREATED)));
-        assertThat("Deve retornar o corpo da resposta com null", resposta.getBody(), is(nullValue()));
-        assertThat("Deve retornar o Header preenchido", resposta.getHeaders(), is(notNullValue()));
-        assertThat("Deve retornar o location da malha criada", resposta.getHeaders().getLocation(), is(equalTo(uri)));
+        assertThat("Deve ser retornado 201 (criado).", response.getStatusCode(), is(equalTo(HttpStatus.CREATED)));
+        assertThat("Deve retornar o corpo da resposta com null", response.getBody(), is(nullValue()));
+        assertThat("Deve retornar o Header preenchido", response.getHeaders(), is(notNullValue()));
+        assertThat("Deve retornar o location da deliveryMap criada", response.getHeaders().getLocation(), is(equalTo(uri)));
     }
 
     @Test
-    public void deveRetornarStatus400AoTentarRegistrarUmaMalhaNula() {
+    public void itShouldReturnStatus400WhenTryRegisterANullDeliveryMap() {
 
         //WHEN
-        ResponseEntity<String> resposta = malhaController.create(
+        ResponseEntity<String> resposta = deliveryMapController.create(
                 null, UriComponentsBuilder.newInstance(),
                 new MockHttpServletRequest(), new MockHttpServletResponse());
 
         //THEN
-        assertThat("Não deve ser criada a malha esta nula.", resposta.getStatusCode(), is(equalTo(HttpStatus.BAD_REQUEST)));
+        assertThat("Não deve ser criada a deliveryMap esta nula.", resposta.getStatusCode(), is(equalTo(HttpStatus.BAD_REQUEST)));
         assertThat("Deve retornar o Header preenchido", resposta.getHeaders(), is(notNullValue()));
     }
 
     @Test
-    public void deveRetornarStatus201AoRegistrarAMalhaLogisticaViaPost() throws Exception {
+    public void itShouldReturnStatus201WhenRegisterADeliveryMapViaPOST() throws Exception {
         //GIVEN
-        String malhaJson = MalhaHelper.malhaJson();
+        String deliveryMapJson = DeliveryMapHelper.deliveryMapJson();
 
         //WHEN
 
         ResultActions resposta = mockMvc.perform(
-                post("/api/malha")
+                post("/api/mapa")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(malhaJson));
+                        .content(deliveryMapJson));
 
         //THEN
         resposta.andExpect(status().isCreated());
     }
 
     @Test
-    public void deveRetornarStatus400AoTentarRegistrarUmaMalhaSemNome() throws Exception {
+    public void itShouldReturnStatus400WhenTryRegisterADeliveryMapWithoutNameViaPOST() throws Exception {
         //GIVEN
-        String malhaJsonSemNome = MalhaHelper.malhaJsonSemNome();
+        String deliveryMapJsonWithoutName = DeliveryMapHelper.deliveryMapJsonWithoutName();
 
         //WHEN
 
         ResultActions resposta = mockMvc.perform(
-                post("/api/malha")
+                post("/api/mapa")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(malhaJsonSemNome));
+                        .content(deliveryMapJsonWithoutName));
 
         //THEN
         resposta.andExpect(status().isBadRequest());
     }
 
     @Test
-    public void deveRetornarStatus400AoTentarRegistrarUmaMalhaSemTemRotas() throws Exception {
+    public void itShouldReturnStatus400WhenTryRegisterADeliveryMapWithoutRoutesViaPOST() throws Exception {
         //GIVEN
-        String malhaJsonSemRotas = MalhaHelper.malhaJsonSemRotas();
+        String deliveryMapJsonWithoutRoutes = DeliveryMapHelper.deliveryMapJsonWithoutRoutes();
 
         //WHEN
         ResultActions resposta = mockMvc.perform(
-                post("/api/malha")
+                post("/api/mapa")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(malhaJsonSemRotas));
+                        .content(deliveryMapJsonWithoutRoutes));
 
         //THEN
         resposta.andExpect(status().isBadRequest());
     }
-
 }
