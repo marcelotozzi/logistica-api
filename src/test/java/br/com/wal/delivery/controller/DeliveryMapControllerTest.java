@@ -29,6 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -77,13 +78,13 @@ public class DeliveryMapControllerTest {
     public void itShouldReturnStatus400WhenTryRegisterANullDeliveryMap() {
 
         //WHEN
-        ResponseEntity<String> resposta = deliveryMapController.create(
+        ResponseEntity<String> response = deliveryMapController.create(
                 null, UriComponentsBuilder.newInstance(),
                 new MockHttpServletRequest(), new MockHttpServletResponse());
 
         //THEN
-        assertThat("Não deve ser criada a deliveryMap esta nula.", resposta.getStatusCode(), is(equalTo(HttpStatus.BAD_REQUEST)));
-        assertThat("Deve retornar o Header preenchido", resposta.getHeaders(), is(notNullValue()));
+        assertThat("Não deve ser criada a deliveryMap esta nula.", response.getStatusCode(), is(equalTo(HttpStatus.BAD_REQUEST)));
+        assertThat("Deve retornar o Header preenchido", response.getHeaders(), is(notNullValue()));
     }
 
     @Test
@@ -92,14 +93,13 @@ public class DeliveryMapControllerTest {
         String deliveryMapJson = DeliveryMapHelper.deliveryMapJson();
 
         //WHEN
-
-        ResultActions resposta = mockMvc.perform(
+        ResultActions response = mockMvc.perform(
                 post("/api/mapa")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(deliveryMapJson));
 
         //THEN
-        resposta.andExpect(status().isCreated());
+        response.andExpect(status().isCreated());
     }
 
     @Test
@@ -108,14 +108,13 @@ public class DeliveryMapControllerTest {
         String deliveryMapJsonWithoutName = DeliveryMapHelper.deliveryMapJsonWithoutName();
 
         //WHEN
-
-        ResultActions resposta = mockMvc.perform(
+        ResultActions response = mockMvc.perform(
                 post("/api/mapa")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(deliveryMapJsonWithoutName));
 
         //THEN
-        resposta.andExpect(status().isBadRequest());
+        response.andExpect(status().isBadRequest());
     }
 
     @Test
@@ -124,12 +123,27 @@ public class DeliveryMapControllerTest {
         String deliveryMapJsonWithoutRoutes = DeliveryMapHelper.deliveryMapJsonWithoutRoutes();
 
         //WHEN
-        ResultActions resposta = mockMvc.perform(
+        ResultActions response = mockMvc.perform(
                 post("/api/mapa")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(deliveryMapJsonWithoutRoutes));
 
         //THEN
-        resposta.andExpect(status().isBadRequest());
+        response.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void itShouldThrows404ErrorWhenTryRegisterAEmptyMap() throws Exception {
+        //GIVEN
+        String emptyMap = "";
+
+        //WHEN
+        ResultActions response = mockMvc.perform(
+                post("/api/mapa")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(emptyMap));
+
+        //THEN
+        response.andExpect(status().isBadRequest());
     }
 }

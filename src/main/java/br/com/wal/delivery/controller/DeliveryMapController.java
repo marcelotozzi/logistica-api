@@ -32,7 +32,7 @@ public class DeliveryMapController {
             consumes = {"application/json"}, headers = "content-type=application/json")
     public
     @ResponseBody
-    ResponseEntity<String> create(@RequestBody final DeliveryMap deliveryMap, UriComponentsBuilder builder,
+    ResponseEntity<String> create(@RequestBody(required = true) final DeliveryMap deliveryMap, UriComponentsBuilder builder,
                                   final HttpServletRequest request, final HttpServletResponse response) {
         HttpHeaders headers = new HttpHeaders();
 
