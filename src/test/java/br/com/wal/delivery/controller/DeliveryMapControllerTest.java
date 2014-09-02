@@ -26,12 +26,13 @@ import java.net.URI;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Matchers.isNotNull;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -71,7 +72,7 @@ public class DeliveryMapControllerTest {
         assertThat("Deve ser retornado 201 (criado).", response.getStatusCode(), is(equalTo(HttpStatus.CREATED)));
         assertThat("Deve retornar o corpo da resposta com null", response.getBody(), is(nullValue()));
         assertThat("Deve retornar o Header preenchido", response.getHeaders(), is(notNullValue()));
-        assertThat("Deve retornar o location da deliveryMap criada", response.getHeaders().getLocation(), is(equalTo(uri)));
+        assertThat("Deve retornar o location da deliveryMap criada", response.getHeaders().getLocation().toString(), is(equalTo(uri.toString())));
     }
 
     @Test
@@ -90,16 +91,20 @@ public class DeliveryMapControllerTest {
     @Test
     public void itShouldReturnStatus201WhenRegisterADeliveryMapViaPOST() throws Exception {
         //GIVEN
+        String deliveryMapId = "1x4V";
+        URI uri = UriComponentsBuilder.fromPath("http:////localhost/api/mapa/" + deliveryMapId).buildAndExpand(deliveryMapId).toUri();
+        when(deliveryMapBusiness.create(isNotNull(DeliveryMap.class))).thenReturn(deliveryMapId);
+
         String deliveryMapJson = DeliveryMapHelper.deliveryMapJson();
 
         //WHEN
-        ResultActions response = mockMvc.perform(
-                post("/api/mapa")
+        ResultActions response = mockMvc.perform(post("/api/mapa")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(deliveryMapJson));
 
         //THEN
-        response.andExpect(status().isCreated());
+        response.andExpect(status().isCreated())
+                .andExpect(header().string("Location", uri.toString()));
     }
 
     @Test
@@ -108,8 +113,7 @@ public class DeliveryMapControllerTest {
         String deliveryMapJsonWithoutName = DeliveryMapHelper.deliveryMapJsonWithoutName();
 
         //WHEN
-        ResultActions response = mockMvc.perform(
-                post("/api/mapa")
+        ResultActions response = mockMvc.perform(post("/api/mapa")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(deliveryMapJsonWithoutName));
 
@@ -123,8 +127,7 @@ public class DeliveryMapControllerTest {
         String deliveryMapJsonWithoutRoutes = DeliveryMapHelper.deliveryMapJsonWithoutRoutes();
 
         //WHEN
-        ResultActions response = mockMvc.perform(
-                post("/api/mapa")
+        ResultActions response = mockMvc.perform(post("/api/mapa")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(deliveryMapJsonWithoutRoutes));
 
@@ -138,12 +141,32 @@ public class DeliveryMapControllerTest {
         String emptyMap = "";
 
         //WHEN
-        ResultActions response = mockMvc.perform(
-                post("/api/mapa")
+        ResultActions response = mockMvc.perform(post("/api/mapa")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(emptyMap));
 
         //THEN
         response.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void itShouldReturnStatus200WhenShowARegisteredMapViaGET() throws Exception {
+        //GIVEN
+        String deliveryMapId = "1x4V";
+        DeliveryMap deliveryMap = DeliveryMapHelper.deliveryMap();
+        String deliveryMapJson = DeliveryMapHelper.deliveryMapJson();
+
+        when(deliveryMapBusiness.create(isNotNull(DeliveryMap.class))).thenReturn(deliveryMapId);
+        when(deliveryMapBusiness.show(deliveryMapId)).thenReturn(deliveryMap);
+
+        mockMvc.perform(post("/api/mapa").contentType(MediaType.APPLICATION_JSON).content(deliveryMapJson)).andExpect(status().isCreated());
+
+        //WHEN
+        ResultActions getResponse = mockMvc.perform(get("/api/mapa/" + deliveryMapId));
+
+        //THEN
+        getResponse.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string(deliveryMapJson));
     }
 }

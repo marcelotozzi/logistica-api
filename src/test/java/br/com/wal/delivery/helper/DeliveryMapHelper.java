@@ -3,6 +3,7 @@ package br.com.wal.delivery.helper;
 import br.com.wal.delivery.model.DeliveryMap;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +30,7 @@ public class DeliveryMapHelper {
 
     private static String read(String file) throws IOException {
         InputStream is = DeliveryMap.class.getResourceAsStream(file);
-        return IOUtils.toString(is);
+        return StringUtils.trimAllWhitespace(IOUtils.toString(is));
     }
 
 

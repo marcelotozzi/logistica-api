@@ -7,12 +7,10 @@ import br.com.wal.delivery.validator.DeliveryMapValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +44,24 @@ public class DeliveryMapController {
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (InvalidDeliveryMapException e) {
             return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "mapa/{token}", method = RequestMethod.GET, produces = {"application/json"})
+    public
+    @ResponseBody
+    ResponseEntity<DeliveryMap> show(@PathVariable(value = "token") final String token,
+                                     final HttpServletRequest request, final HttpServletResponse response) {
+
+        HttpHeaders headers = new HttpHeaders();
+
+        try {
+            DeliveryMap deliveryMap = deliveryMapBusiness.show(token);
+
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return new ResponseEntity<>(deliveryMap, headers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
         }

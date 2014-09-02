@@ -17,4 +17,8 @@ public class DeliveryMapBusiness {
     public String create(DeliveryMap deliveryMap) throws RepositoryException {
         return deliveryMapRepository.register(deliveryMap);
     }
+
+    public DeliveryMap show(String token) throws RepositoryException {
+        return deliveryMapRepository.show(token);
+    }
 }
