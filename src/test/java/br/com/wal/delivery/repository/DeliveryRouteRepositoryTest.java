@@ -4,7 +4,7 @@ import br.com.wal.delivery.controller.query.QueryResult;
 import br.com.wal.delivery.controller.query.QueryRoute;
 import br.com.wal.delivery.exception.MappingException;
 import br.com.wal.delivery.helper.DeliveryMapHelper;
-import br.com.wal.delivery.helper.QueryHelper;
+import br.com.wal.delivery.helper.QueryRouteHelper;
 import br.com.wal.delivery.model.DeliveryMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +35,7 @@ public class DeliveryRouteRepositoryTest {
         deliveryRouteRepository.map("1REV324V3", deliveryMap);
 
         //THEN
-        QueryRoute queryRoute = QueryHelper.queryRoute();
+        QueryRoute queryRoute = QueryRouteHelper.routeAToD();
         QueryResult queryResult = deliveryRouteRepository.query(queryRoute);
 
         assertThat(queryResult, is(notNullValue()));

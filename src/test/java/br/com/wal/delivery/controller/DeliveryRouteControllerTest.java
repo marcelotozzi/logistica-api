@@ -1,6 +1,7 @@
 package br.com.wal.delivery.controller;
 
-import br.com.wal.delivery.helper.QueryHelper;
+import br.com.wal.delivery.helper.QueryResultHelper;
+import br.com.wal.delivery.helper.QueryRouteHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +55,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldFindTheBestRouteBetweenAPointAndDPoint() throws Exception {
         //GIVEN
-        String queryRoute = QueryHelper.queryRouteAToDJSON();
+        String queryRoute = QueryRouteHelper.routeAToDJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -63,7 +64,7 @@ public class DeliveryRouteControllerTest {
                         .content(queryRoute));
 
         //THEN
-        String queryRouteResult = QueryHelper.queryRouteResultJSON();
+        String queryRouteResult = QueryResultHelper.resultAToDJSON();
 
         response.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -73,7 +74,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldFindTheBestRouteBetweenBPointAndEPoint() throws Exception {
         //GIVEN
-        String queryRoute = QueryHelper.queryRouteBToEJSON();
+        String queryRoute = QueryRouteHelper.routeBToEJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -82,7 +83,7 @@ public class DeliveryRouteControllerTest {
                         .content(queryRoute));
 
         //THEN
-        String queryRouteResult = QueryHelper.queryRouteResultBToEJSON();
+        String queryRouteResult = QueryResultHelper.resultBToEJSON();
 
         response.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -92,7 +93,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldFindTheBestRouteBetweenBPointAndAPoint() throws Exception {
         //GIVEN
-        String queryRoute = QueryHelper.queryRouteBToAJSON();
+        String queryRoute = QueryRouteHelper.routeBToAJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -101,7 +102,7 @@ public class DeliveryRouteControllerTest {
                         .content(queryRoute));
 
         //THEN
-        String queryRouteResult = QueryHelper.queryRouteResultBToAJSON();
+        String queryRouteResult = QueryResultHelper.resultBToAJSON();
 
         response.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -111,7 +112,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldFindTheBestRouteBetweenCPointAndBPoint() throws Exception {
         //GIVEN
-        String queryRoute = QueryHelper.queryRouteCToBJSON();
+        String queryRoute = QueryRouteHelper.routeCToBJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -120,7 +121,7 @@ public class DeliveryRouteControllerTest {
                         .content(queryRoute));
 
         //THEN
-        String queryRouteResult = QueryHelper.queryRouteResultCToBJSON();
+        String queryRouteResult = QueryResultHelper.resultCToBJSON();
 
         response.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -145,7 +146,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldThrows404ErrorWhenTrySearchWithQueryWithoutMapName() throws Exception {
         //GIVEN
-        String queryRouteWithoutMapName = QueryHelper.queryRouteWithoutMapNameJSON();
+        String queryRouteWithoutMapName = QueryRouteHelper.routeWithoutMapNameJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -160,7 +161,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldThrows404ErrorWhenTrySearchWithQueryWithoutOrigin() throws Exception {
         //GIVEN
-        String queryRouteWithoutOrigin = QueryHelper.queryRouteWithoutOriginJSON();
+        String queryRouteWithoutOrigin = QueryRouteHelper.routeWithoutOriginJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -175,7 +176,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldThrows404ErrorWhenTrySearchWithQueryWithoutDestination() throws Exception {
         //GIVEN
-        String queryRouteWithoutDestination = QueryHelper.queryRouteWithoutDestinationJSON();
+        String queryRouteWithoutDestination = QueryRouteHelper.routeWithoutDestinationJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -190,7 +191,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldThrows404ErrorWhenTrySearchWithQueryWithoutAutonomy() throws Exception {
         //GIVEN
-        String queryRouteWithoutAutonomy = QueryHelper.queryRouteWithoutAutonomyJSON();
+        String queryRouteWithoutAutonomy = QueryRouteHelper.routeWithoutAutonomyJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -205,7 +206,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldThrows404ErrorWhenTrySearchWithQueryWithoutLiter() throws Exception {
         //GIVEN
-        String queryRouteWithoutLiter = QueryHelper.queryRouteWithoutLiterJSON();
+        String queryRouteWithoutLiter = QueryRouteHelper.routeWithoutLiterJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
