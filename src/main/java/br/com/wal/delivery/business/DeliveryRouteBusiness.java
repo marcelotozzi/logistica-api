@@ -2,6 +2,8 @@ package br.com.wal.delivery.business;
 
 import br.com.wal.delivery.controller.query.QueryResult;
 import br.com.wal.delivery.controller.query.QueryRoute;
+import br.com.wal.delivery.repository.DeliveryRouteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,10 +14,10 @@ import java.util.Arrays;
  */
 @Service
 public class DeliveryRouteBusiness {
+    @Autowired
+    private DeliveryRouteRepository deliveryRouteRepository;
+
     public QueryResult query(QueryRoute queryRoute) {
-        QueryResult queryResult = new QueryResult();
-        queryResult.setCost(BigDecimal.valueOf(6.25));
-        queryResult.setRoute(Arrays.asList("A", "B", "D"));
-        return queryResult;
+        return deliveryRouteRepository.query(queryRoute);
     }
 }

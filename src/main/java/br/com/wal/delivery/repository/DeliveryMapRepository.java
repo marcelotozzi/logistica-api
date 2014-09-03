@@ -5,15 +5,10 @@ import br.com.wal.delivery.model.DeliveryMap;
 import br.com.wal.delivery.repository.generator.RedisKeyGenerator;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.exceptions.JedisException;
-
-import javax.annotation.PreDestroy;
-import javax.inject.Inject;
 
 /**
  * Created by marcelotozzi on 01/09/14.
@@ -21,26 +16,15 @@ import javax.inject.Inject;
 @Repository
 public class DeliveryMapRepository {
     private static final Logger LOGGER = Logger.getLogger(DeliveryMapRepository.class);
-    private final JedisPool pool;
 
-    @Inject
-    public DeliveryMapRepository(@Value("${redis.host}") String host,
-                                 @Value("${redis.port}") int port,
-                                 @Value("${redis.timeout}") int timeout,
-                                 @Value("${redis.pass}") String pass) {
-        this.pool = new JedisPool(new JedisPoolConfig(), host, port, timeout, pass);
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        this.pool.destroy();
-    }
+    @Autowired
+    private RedisFactory redisFactory;
 
     public String register(DeliveryMap deliveryMap) throws RepositoryException {
         Jedis jedis = null;
 
         try {
-            jedis = pool.getResource();
+            jedis = redisFactory.getResource();
 
             ObjectMapper mapper = new ObjectMapper();
 
@@ -71,7 +55,7 @@ public class DeliveryMapRepository {
         Jedis jedis = null;
 
         try {
-            jedis = pool.getResource();
+            jedis = redisFactory.getResource();
 
             String key = RedisKeyGenerator.mount("deliverymap", deliveryMapToken);
 
