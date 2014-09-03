@@ -28,7 +28,7 @@ public class DeliveryRouteController {
     @Autowired
     private DeliveryRouteBusiness deliveryRouteBusiness;
 
-    @RequestMapping(value = "rota", method = RequestMethod.GET,
+    @RequestMapping(value = "rota", method = RequestMethod.POST,
             consumes = {"application/json"}, produces = {"application/json"},
             headers = "content-type=application/json")
     public

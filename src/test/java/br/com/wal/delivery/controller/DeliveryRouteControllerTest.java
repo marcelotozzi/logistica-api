@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,7 +58,7 @@ public class DeliveryRouteControllerTest {
 
         //WHEN
         ResultActions response = mockMvc.perform(
-                get("/api/rota")
+                post("/api/rota")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(queryRoute));
 
@@ -77,7 +77,7 @@ public class DeliveryRouteControllerTest {
 
         //WHEN
         ResultActions response = mockMvc.perform(
-                get("/api/rota")
+                post("/api/rota")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(emptyQueryRoute));
 
@@ -92,7 +92,7 @@ public class DeliveryRouteControllerTest {
 
         //WHEN
         ResultActions response = mockMvc.perform(
-                get("/api/rota")
+                post("/api/rota")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(queryRouteWithoutMapName));
 
@@ -107,7 +107,7 @@ public class DeliveryRouteControllerTest {
 
         //WHEN
         ResultActions response = mockMvc.perform(
-                get("/api/rota")
+                post("/api/rota")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(queryRouteWithoutOrigin));
 
@@ -122,7 +122,7 @@ public class DeliveryRouteControllerTest {
 
         //WHEN
         ResultActions response = mockMvc.perform(
-                get("/api/rota")
+                post("/api/rota")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(queryRouteWithoutDestination));
 
@@ -137,7 +137,7 @@ public class DeliveryRouteControllerTest {
 
         //WHEN
         ResultActions response = mockMvc.perform(
-                get("/api/rota")
+                post("/api/rota")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(queryRouteWithoutAutonomy));
 
@@ -152,7 +152,7 @@ public class DeliveryRouteControllerTest {
 
         //WHEN
         ResultActions response = mockMvc.perform(
-                get("/api/rota")
+                post("/api/rota")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(queryRouteWithoutLiter));
 
