@@ -54,7 +54,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldSearchBestRouteViaGET() throws Exception {
         //GIVEN
-        String queryRoute = QueryHelper.queryRoute();
+        String queryRoute = QueryHelper.queryRouteJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -63,7 +63,7 @@ public class DeliveryRouteControllerTest {
                         .content(queryRoute));
 
         //THEN
-        String queryRouteResult = QueryHelper.queryRouteResult();
+        String queryRouteResult = QueryHelper.queryRouteResultJSON();
 
         response.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -88,7 +88,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldThrows404ErrorWhenTrySearchWithQueryWithoutMapName() throws Exception {
         //GIVEN
-        String queryRouteWithoutMapName = QueryHelper.queryRouteWithoutMapName();
+        String queryRouteWithoutMapName = QueryHelper.queryRouteWithoutMapNameJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -103,7 +103,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldThrows404ErrorWhenTrySearchWithQueryWithoutOrigin() throws Exception {
         //GIVEN
-        String queryRouteWithoutOrigin = QueryHelper.queryRouteWithoutOrigin();
+        String queryRouteWithoutOrigin = QueryHelper.queryRouteWithoutOriginJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -118,7 +118,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldThrows404ErrorWhenTrySearchWithQueryWithoutDestination() throws Exception {
         //GIVEN
-        String queryRouteWithoutDestination = QueryHelper.queryRouteWithoutDestination();
+        String queryRouteWithoutDestination = QueryHelper.queryRouteWithoutDestinationJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -133,7 +133,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldThrows404ErrorWhenTrySearchWithQueryWithoutAutonomy() throws Exception {
         //GIVEN
-        String queryRouteWithoutAutonomy = QueryHelper.queryRouteWithoutAutonomy();
+        String queryRouteWithoutAutonomy = QueryHelper.queryRouteWithoutAutonomyJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -148,7 +148,7 @@ public class DeliveryRouteControllerTest {
     @Test
     public void itShouldThrows404ErrorWhenTrySearchWithQueryWithoutLiter() throws Exception {
         //GIVEN
-        String queryRouteWithoutLiter = QueryHelper.queryRouteWithoutLiter();
+        String queryRouteWithoutLiter = QueryHelper.queryRouteWithoutLiterJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(

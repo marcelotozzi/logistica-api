@@ -1,6 +1,7 @@
 package br.com.wal.delivery.controller;
 
 import br.com.wal.delivery.business.DeliveryMapBusiness;
+import br.com.wal.delivery.exception.MappingException;
 import br.com.wal.delivery.exception.RepositoryException;
 import br.com.wal.delivery.helper.DeliveryMapHelper;
 import br.com.wal.delivery.model.DeliveryMap;
@@ -56,7 +57,7 @@ public class DeliveryMapControllerTest {
     }
 
     @Test
-    public void itShouldReturnStatus201WhenRegisterADeliveryMap() throws IOException, RepositoryException {
+    public void itShouldReturnStatus201WhenRegisterADeliveryMap() throws IOException, RepositoryException, MappingException {
         //GIVEN
         String deliveryMapId = "1x4V";
         URI uri = UriComponentsBuilder.fromPath("/api/mapa/" + deliveryMapId).buildAndExpand(deliveryMapId).toUri();

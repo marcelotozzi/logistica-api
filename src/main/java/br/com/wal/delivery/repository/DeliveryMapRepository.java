@@ -5,6 +5,7 @@ import br.com.wal.delivery.model.DeliveryMap;
 import br.com.wal.delivery.repository.generator.RedisKeyGenerator;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -12,6 +13,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.exceptions.JedisException;
 
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 /**
  * Created by marcelotozzi on 01/09/14.
@@ -21,12 +23,11 @@ public class DeliveryMapRepository {
     private static final Logger LOGGER = Logger.getLogger(DeliveryMapRepository.class);
     private final JedisPool pool;
 
-    private String host = "pub-redis-19856.us-east-1-4.3.ec2.garantiadata.com";
-    private int port = 19856;
-    private int timeout = 30000;
-    private String pass = "logistica";
-
-    public DeliveryMapRepository() {
+    @Inject
+    public DeliveryMapRepository(@Value("${redis.host}") String host,
+                                 @Value("${redis.port}") int port,
+                                 @Value("${redis.timeout}") int timeout,
+                                 @Value("${redis.pass}") String pass) {
         this.pool = new JedisPool(new JedisPoolConfig(), host, port, timeout, pass);
     }
 

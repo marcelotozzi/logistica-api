@@ -19,9 +19,14 @@
         </layout>
     </appender>
 
+    <category name="org.neo4j">
+        <priority value="DEBUG"/>
+        <appender-ref ref="CONSOLE"/>
+    </category>
+
     <!-- ROOT -->
     <root>
-        <level value="DEBUG"/>
+        <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>
     </root>
 </log4j:configuration>
