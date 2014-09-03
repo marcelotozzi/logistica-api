@@ -17,6 +17,7 @@
         <java-inject-version>1</java-inject-version>
         <dollar-version>1.0-beta3</dollar-version>
         <neo4j-version>2.1.3</neo4j-version>
+        <joda-money-version>0.9.1</joda-money-version>
 
         <junit-version>4.11</junit-version>
         <spring-test-version>4.0.2.RELEASE</spring-test-version>
@@ -91,13 +92,19 @@
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
-            <version>1</version>
+            <version>${java-inject-version}</version>
         </dependency>
         <!-- Neo4j -->
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j</artifactId>
             <version>${neo4j-version}</version>
+        </dependency>
+        <!--Joda money-->
+        <dependency>
+            <groupId>org.joda</groupId>
+            <artifactId>joda-money</artifactId>
+            <version>${joda-money-version}</version>
         </dependency>
 
         <!--Teste-->
