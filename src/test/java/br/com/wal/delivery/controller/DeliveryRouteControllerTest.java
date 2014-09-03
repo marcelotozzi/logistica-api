@@ -52,9 +52,9 @@ public class DeliveryRouteControllerTest {
      * @throws Exception
      */
     @Test
-    public void itShouldSearchBestRouteViaGET() throws Exception {
+    public void itShouldFindTheBestRouteBetweenAPointAndDPoint() throws Exception {
         //GIVEN
-        String queryRoute = QueryHelper.queryRouteJSON();
+        String queryRoute = QueryHelper.queryRouteAToDJSON();
 
         //WHEN
         ResultActions response = mockMvc.perform(
@@ -64,6 +64,63 @@ public class DeliveryRouteControllerTest {
 
         //THEN
         String queryRouteResult = QueryHelper.queryRouteResultJSON();
+
+        response.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string(queryRouteResult));
+    }
+
+    @Test
+    public void itShouldFindTheBestRouteBetweenBPointAndEPoint() throws Exception {
+        //GIVEN
+        String queryRoute = QueryHelper.queryRouteBToEJSON();
+
+        //WHEN
+        ResultActions response = mockMvc.perform(
+                post("/api/rota")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(queryRoute));
+
+        //THEN
+        String queryRouteResult = QueryHelper.queryRouteResultBToEJSON();
+
+        response.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string(queryRouteResult));
+    }
+
+    @Test
+    public void itShouldFindTheBestRouteBetweenBPointAndAPoint() throws Exception {
+        //GIVEN
+        String queryRoute = QueryHelper.queryRouteBToAJSON();
+
+        //WHEN
+        ResultActions response = mockMvc.perform(
+                post("/api/rota")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(queryRoute));
+
+        //THEN
+        String queryRouteResult = QueryHelper.queryRouteResultBToAJSON();
+
+        response.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string(queryRouteResult));
+    }
+
+    @Test
+    public void itShouldFindTheBestRouteBetweenCPointAndBPoint() throws Exception {
+        //GIVEN
+        String queryRoute = QueryHelper.queryRouteCToBJSON();
+
+        //WHEN
+        ResultActions response = mockMvc.perform(
+                post("/api/rota")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(queryRoute));
+
+        //THEN
+        String queryRouteResult = QueryHelper.queryRouteResultCToBJSON();
 
         response.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

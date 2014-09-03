@@ -12,7 +12,7 @@ import java.io.InputStream;
  * Created by marcelotozzi on 02/09/14.
  */
 public class QueryHelper {
-    public static String queryRouteJSON() throws IOException {
+    public static String queryRouteAToDJSON() throws IOException {
         return read("/json/queryRoute.json");
     }
 
@@ -47,6 +47,30 @@ public class QueryHelper {
 
     public static QueryRoute queryRoute() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(queryRouteJSON(), QueryRoute.class);
+        return mapper.readValue(queryRouteAToDJSON(), QueryRoute.class);
+    }
+
+    public static String queryRouteBToEJSON() throws IOException {
+        return read("/json/queryRouteBToE.json");
+    }
+
+    public static String queryRouteBToAJSON() throws IOException {
+        return read("/json/queryRouteBToA.json");
+    }
+
+    public static String queryRouteResultBToAJSON() throws IOException {
+        return read("/json/queryRouteResultBToA.json");
+    }
+
+    public static String queryRouteResultBToEJSON() throws IOException {
+        return read("/json/queryRouteResultBToE.json");
+    }
+
+    public static String queryRouteCToBJSON() throws IOException {
+        return read("/json/queryRouteCToB.json");
+    }
+
+    public static String queryRouteResultCToBJSON() throws IOException {
+        return read("/json/queryRouteResultCToB.json");
     }
 }
