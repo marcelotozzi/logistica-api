@@ -1,0 +1,20 @@
+begin
+create (_0:`DeliveryMap` {`name`:"SP", `token`:"4SAI6E8LO32PHQTFCXV0"})
+create (_1:`Point` {`name`:"A"})
+create (_2:`Point` {`name`:"B"})
+create (_3:`Point` {`name`:"C"})
+create (_4:`Point` {`name`:"D"})
+create (_5:`Point` {`name`:"E"})
+create _0-[:`BELONGS`]->_1
+create _0-[:`BELONGS`]->_2
+create _0-[:`BELONGS`]->_3
+create _0-[:`BELONGS`]->_4
+create _0-[:`BELONGS`]->_5
+create _1-[:`DISTANCE` {`km`:20}]->_3
+create _1-[:`DISTANCE` {`km`:10}]->_2
+create _2-[:`DISTANCE` {`km`:50}]->_5
+create _2-[:`DISTANCE` {`km`:15}]->_4
+create _3-[:`DISTANCE` {`km`:30}]->_4
+create _4-[:`DISTANCE` {`km`:30}]->_5
+;
+commit
