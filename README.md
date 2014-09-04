@@ -31,23 +31,23 @@ Enviando mapa
 curl -X POST 
     -H 'Content-Type:application/json' 
     --data @deliveryMap.json 
-    localhost:8080/api/mapa
+    http://ec2-54-80-62-123.compute-1.amazonaws.com/logistica-api/api/mapa
     -v
 ```
 
 O retorno do header deve conter o Location do mapa registrado:
 ```
-* Connected to localhost (::1) port 8080 (#0)
+* Connected to http://ec2-54-80-62-123.compute-1.amazonaws.com/logistica-api (::1) port 80 (#0)
 > POST /api/mapa HTTP/1.1
 > User-Agent: curl/7.30.0
-> Host: localhost:8080
+> Host: http://ec2-54-80-62-123.compute-1.amazonaws.com/logistica-api:80
 > Accept: */*
 > Content-Type:application/json
 > Content-Length: 589
 < HTTP/1.1 201 Created
 * Server Apache-Coyote/1.1 is not blacklisted
 < Server: Apache-Coyote/1.1
-< Location: http://localhost:8080/api/mapa/KZMEFWXJC5Y1LGHP7U9N
+< Location: http://ec2-54-80-62-123.compute-1.amazonaws.com/logistica-api/api/mapa/KZMEFWXJC5Y1LGHP7U9N
 < Content-Length: 0
 < Date: Thu, 04 Sep 2014 19:49:19 GMT
 < 
@@ -59,7 +59,7 @@ Buscando a rota
 curl -X POST 
     -d '{"mapa": "SP","origem": "C","destino": "B","autonomia": 15,"litro": 3.00}' 
     -H "Content-Type: application/json"
-    http://localhost:8080/api/rota 
+    http://ec2-54-80-62-123.compute-1.amazonaws.com/logistica-api/api/rota 
 ```
 
 Retorno:
