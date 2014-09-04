@@ -2,13 +2,23 @@ package br.com.wal.delivery.repository;
 
 import br.com.wal.delivery.exception.RepositoryException;
 import br.com.wal.delivery.model.DeliveryMap;
-import br.com.wal.delivery.repository.generator.RedisKeyGenerator;
+import br.com.wal.delivery.model.DeliveryRoute;
+import br.com.wal.delivery.repository.generator.TokenGenerator;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.util.JSON;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.exceptions.JedisException;
+
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by marcelotozzi on 01/09/14.
@@ -18,66 +28,72 @@ public class DeliveryMapRepository {
     private static final Logger LOGGER = Logger.getLogger(DeliveryMapRepository.class);
 
     @Autowired
-    private RedisFactory redisFactory;
+    private MongoDBFactory mongoDBFactory;
 
     public String register(DeliveryMap deliveryMap) throws RepositoryException {
-        Jedis jedis = null;
+        DB db = null;
 
         try {
-            jedis = redisFactory.getResource();
+            db = mongoDBFactory.getClient();
+            DBCollection mapCollection = db.getCollection("mapas");
 
             ObjectMapper mapper = new ObjectMapper();
-
-            String token = RedisKeyGenerator.generate(20);
-            String key = RedisKeyGenerator.mount("deliverymap", token);
-
             String value = mapper.writeValueAsString(deliveryMap);
 
-            jedis.set(key, value);
+            String token = TokenGenerator.generate(20);
+            BasicDBObject doc = (BasicDBObject) JSON.parse(value);
+            doc.append("token", token);
+
+            mapCollection.insert(doc);
 
             return token;
-        } catch (JedisException e) {
-            String message = "Erro ao acessar o Redis";
-            LOGGER.error(message, e);
-            throw new RepositoryException(message, e);
-        } catch (Exception e) {
-            String message = "Erro ao register a Malha";
-            LOGGER.error(message, e);
-            throw new RepositoryException(message, e);
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonGenerationException e) {
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
-            if (null != jedis) {
-                jedis.close();
-            }
         }
+        return null;
     }
 
     public DeliveryMap show(String deliveryMapToken) throws RepositoryException {
-        Jedis jedis = null;
+        DB db = null;
 
         try {
-            jedis = redisFactory.getResource();
+            db = mongoDBFactory.getClient();
 
-            String key = RedisKeyGenerator.mount("deliverymap", deliveryMapToken);
+            DBCollection collection = db.getCollection("mapas");
 
-            String value = jedis.get(key);
+            BasicDBObject query = new BasicDBObject();
+            query.append("token", deliveryMapToken);
+            BasicDBObject map = (BasicDBObject) collection.findOne(query);
 
-            ObjectMapper mapper = new ObjectMapper();
+            DeliveryMap deliveryMap = new DeliveryMap();
+            deliveryMap.setName((String) map.get("nome"));
 
-            DeliveryMap deliveryMap = mapper.readValue(value, DeliveryMap.class);
+            List<DeliveryRoute> routes = new ArrayList<>();
+
+            List<BasicDBObject> docRoutes = (List<BasicDBObject>) map.get("rotas");
+
+            for (BasicDBObject d : docRoutes) {
+                DeliveryRoute e = new DeliveryRoute();
+
+                e.setOrigin(d.getString("origem"));
+                e.setDestination(d.getString("destino"));
+                e.setDistance(d.getInt("km"));
+                routes.add(e);
+            }
+            deliveryMap.setDeliveryRoutes(routes);
 
             return deliveryMap;
-        } catch (JedisException e) {
-            String message = "Erro ao acessar o Redis";
-            LOGGER.error(message, e);
-            throw new RepositoryException(message, e);
-        } catch (Exception e) {
-            String message = "Erro ao buscar o Mapa";
-            LOGGER.error(message, e);
-            throw new RepositoryException(message, e);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
         } finally {
-            if (null != jedis) {
-                jedis.close();
-            }
         }
+        return null;
     }
 }
