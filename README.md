@@ -20,7 +20,7 @@ Também gostariamos de acompanhar o desenvolvimento da sua aplicação através 
 
 Usei o MongoDB para persistência dos mapas, Neo4j para montar as rotas e fazer a busca.
 
-No começo usei o Redis para persistir o mapa e depois alterei para MongoDB. O Redis, sendo apenas um chave-valor, caso eu precisasse buscar algo dentro do json ou atualizá-lo teria que reescrever por completo. No MongoDB isso seria mais fácil, por isso a mudança. Usei o Neo4j pois ele já tem nativo o algoritmo de Dijkstra, fazendo com q apenas precise mapear as rotas.
+No começo usei o Redis para persistir o mapa e depois alterei para MongoDB. O Redis, sendo apenas um chave-valor, caso eu precisasse buscar algo dentro do json ou atualizá-lo teria que reescrever por completo. No MongoDB isso seria mais fácil, por isso a mudança. Usei o Neo4j pois ele já tem nativo o algoritmo de Dijkstra, fazendo com que apenas precise mapear as rotas.
 Claro, levando em consideração uma aplicação real existem dezenas de coisas para fazer, mas para uma POC acredito que funcione.
 
 
