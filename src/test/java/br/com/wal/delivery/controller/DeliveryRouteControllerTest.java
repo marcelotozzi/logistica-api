@@ -36,19 +36,6 @@ public class DeliveryRouteControllerTest {
 
     /**
      * Deve retornar a melhor rota entre A e D com o custo calculado.
-     * query:
-     * {
-     * "mapa": "SP",
-     * "origem": "A",
-     * "destino": "D",
-     * "autonomia": 10,
-     * "litro": 2.50
-     * }
-     * <p/>
-     * resultado:
-     * {
-     * "rota":["A","B","D"],"custo":6.25
-     * }
      *
      * @throws Exception
      */

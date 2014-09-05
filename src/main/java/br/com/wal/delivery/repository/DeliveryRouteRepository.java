@@ -6,6 +6,8 @@ import br.com.wal.delivery.controller.query.QueryRoute;
 import br.com.wal.delivery.exception.MappingException;
 import br.com.wal.delivery.model.DeliveryMap;
 import br.com.wal.delivery.model.DeliveryRoute;
+import org.neo4j.cypher.javacompat.ExecutionEngine;
+import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphalgo.GraphAlgoFactory;
 import org.neo4j.graphalgo.PathFinder;
 import org.neo4j.graphalgo.WeightedPath;
@@ -82,7 +84,7 @@ public class DeliveryRouteRepository {
         Transaction tx = graphDb.beginTx();
         try {
             // Criar Mapa
-            Node nodeDeliveryMap = createMapNode(graphDb, token);
+            Node nodeDeliveryMap = createMapNode(graphDb, deliveryMap.getName());
             nodeDeliveryMap.setProperty("token", token);
             nodeDeliveryMap.setProperty("name", deliveryMap.getName());
 
@@ -100,8 +102,12 @@ public class DeliveryRouteRepository {
                 distanceRelationship.setProperty("km", deliveryRoute.getDistance());
 
                 // Relaciona pontos com o mapa
-                nodeDeliveryMap.createRelationshipTo(nodeOrigin, RelTypes.BELONGS);
-                nodeDeliveryMap.createRelationshipTo(nodeDestination, RelTypes.BELONGS);
+                if (!nodeOrigin.hasRelationship(RelTypes.BELONGS, Direction.BOTH)) {
+                    nodeDeliveryMap.createRelationshipTo(nodeOrigin, RelTypes.BELONGS);
+                }
+                if (!nodeDestination.hasRelationship(RelTypes.BELONGS, Direction.BOTH)) {
+                    nodeDeliveryMap.createRelationshipTo(nodeDestination, RelTypes.BELONGS);
+                }
             }
 
             tx.success();
@@ -136,10 +142,10 @@ public class DeliveryRouteRepository {
         return node;
     }
 
-    private Node createMapNode(GraphDatabaseService graphDb, String token) {
+    private Node createMapNode(GraphDatabaseService graphDb, String name) {
         Label label = DynamicLabel.label("DeliveryMap");
 
-        ResourceIterator<Node> nodeIterator = graphDb.findNodesByLabelAndProperty(label, "token", token).iterator();
+        ResourceIterator<Node> nodeIterator = graphDb.findNodesByLabelAndProperty(label, "name", name).iterator();
         Node node;
 
         if (nodeIterator.hasNext()) {
