@@ -15,8 +15,10 @@ import java.net.UnknownHostException;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class MongoDBFactory {
+    private String uri = "mongodb://usuario:user@ds035310.mongolab.com:35310/logistica";
+
     public DB getClient() throws UnknownHostException {
-        MongoClientURI clientURI = new MongoClientURI("mongodb://usuario:user@ds035310.mongolab.com:35310/logistica");
+        MongoClientURI clientURI = new MongoClientURI(uri);
         MongoClient client = new MongoClient(clientURI);
         return client.getDB("logistica");
     }
